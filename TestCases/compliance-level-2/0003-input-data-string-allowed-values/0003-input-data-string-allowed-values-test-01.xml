@@ -3,7 +3,10 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.omg.org/spec/DMN/20160719/testcase ../../testCases.xsd">
 	<modelName>0003-input-data-string-allowed-values.dmn</modelName>
-	<group>cl2/input-data</group>
+	<labels>
+		<label>base</label>
+		<label>simple type</label>
+	</labels>
 	<testCase id="001"> 
 		<description>Testing valid input</description>
 		<inputNode name="Employment Status">
