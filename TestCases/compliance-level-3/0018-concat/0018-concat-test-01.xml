@@ -18,12 +18,20 @@
 		</resultNode>
 		<resultNode name="concat2" type="decision">
 			<expected>
-				<value>abc</value>
+				<list>
+					<item><value>a</value></item>
+					<item><value>b</value></item>
+					<item><value>c</value></item>
+				</list>
 			</expected>
 		</resultNode>
 		<resultNode name="concat3" type="decision">
 			<expected>
-				<value>abc</value>
+				<list>
+					<item><value>a</value></item>
+					<item><value>b</value></item>
+					<item><value>c</value></item>
+				</list>
 			</expected>
 		</resultNode>
 	</testCase>
@@ -44,12 +52,20 @@
 		</resultNode>
 		<resultNode name="concat2" type="decision">
 			<expected>
-				<value>123</value>
+				<list>
+					<item><value>1</value></item>
+					<item><value>2</value></item>
+					<item><value>3</value></item>
+				</list>
 			</expected>
 		</resultNode>
 		<resultNode name="concat3" type="decision">
 			<expected>
-				<value>123</value>
+				<list>
+					<item><value>1</value></item>
+					<item><value>2</value></item>
+					<item><value>3</value></item>
+				</list>
 			</expected>
 		</resultNode>
 	</testCase>

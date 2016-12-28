@@ -36,7 +36,7 @@
 			<requiredInput href="#_5dbce9ca-7e5c-4860-886f-d1d97909b7c5"/>
 		</informationRequirement>
 		<literalExpression>
-			<text>string([a,b,c])</text>
+			<text>[a,b,c]</text>
 		</literalExpression>
 	</decision>
 	<decision id="_af379957-4df3-4daf-8f17-04f892d1627d" name="concat3">
@@ -51,7 +51,7 @@
 			<requiredInput href="#_5dbce9ca-7e5c-4860-886f-d1d97909b7c5"/>
 		</informationRequirement>
 		<literalExpression>
-			<text>string(concatenate(a,b,c))</text>
+			<text>concatenate(a,b,c)</text>
 		</literalExpression>
 	</decision>
 </definitions>
