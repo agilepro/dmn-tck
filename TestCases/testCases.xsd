@@ -58,7 +58,7 @@
 			<xs:element name="list">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="item" type="valueType" maxOccurs="unbounded"/>
+						<xs:element name="item" type="valueType" minOccurs="0" maxOccurs="unbounded"/>
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
