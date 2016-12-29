@@ -149,7 +149,11 @@
 		</resultNode>
 		<resultNode name="remove2" type="decision">
 			<expected>
-				<value>a</value>
+				<list>
+					<item>
+						<value>a</value>
+					</item>
+				</list>
 			</expected>
 		</resultNode>
 		<resultNode name="insert3" type="decision">
