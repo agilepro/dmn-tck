@@ -208,7 +208,7 @@
                         <tbody>
         <#list tByLabels.rows as row>
                         <tr>
-                            <th class="text-nowrap" scope="row"><a onclick="labelDetail('detail_${vendor.fileNameId}.html', 'tb${row_index}','${row.text[0]}')">${row.text[0]}</a></th>
+                            <th class="text-nowrap text-small" scope="row"><a onclick="labelDetail('detail_${vendor.fileNameId}.html', 'tb${row_index}','${row.text[0]}')">${row.text[0]}</a></th>
                             <td align="center">
                                 <span class="glyphicon ${row.icons[1]}" aria-hidden="true"><br/><small>${row.text[1]}</small></span>
                             </td>

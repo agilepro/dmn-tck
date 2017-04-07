@@ -8,6 +8,10 @@
     text-align: right;
     padding-right: 35px;
 }
+.text-small {
+    font-size: small;
+}
+        
         
 html,
 body {
