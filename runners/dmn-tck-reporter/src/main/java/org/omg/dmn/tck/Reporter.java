@@ -56,35 +56,19 @@ public class Reporter {
         Map<String, List<TestCasesData>> labels = sortTestsByLabel( tests );
 
         ReportHeader header = createReportHeader( tests, labels, results );
-        ReportTable tableByLabels = createTableByLabels( labels, results );
-        List<ReportChart> chartByLabels = createChartByLabels( labels, results);
+        Map<String, ReportTable> tableByLabels = createTableByLabels( labels, results );
+        Map<String, ReportChart> chartByLabels = createChartByLabels( labels, results);
         ReportTable tableAllTests = createTableAllTests( tests.values(), results );
         List<ReportTable> tableIndividualLabels = createTableByIndividualLabels( labels, results );
 
         logger.info( "Generating report" );
-        try {
-            Configuration cfg = createFreemarkerConfiguration();
-            Template temp = cfg.getTemplate( "/templates/report.ftl" );
+        Configuration cfg = createFreemarkerConfiguration();
 
-            Map<String, Object> data = new HashMap<>(  );
-            data.put( "header", header );
-            data.put( "tByLabels", tableByLabels );
-            data.put( "tAllTests", tableAllTests );
-            data.put( "tIndLabels", tableIndividualLabels );
-            data.put( "cByLabels", chartByLabels );
-
-            Writer out = new FileWriter( params.output );
-            temp.process( data, out );
-            out.close();
-        } catch ( IOException e ) {
-            e.printStackTrace();
-        } catch ( TemplateException e ) {
-            e.printStackTrace();
+        IndexGenerator.generatePage( params, cfg, results );
+        for( Vendor vendor : results.values() ) {
+            OverviewGenerator.generatePage( params, cfg, vendor, header, tableByLabels.get( vendor.getFileNameId() ), chartByLabels.get( vendor.getFileNameId() ) );
+            DetailGenerator.generatePage( params, cfg, vendor, header, tableAllTests, tableIndividualLabels );
         }
-
-        labels.entrySet().forEach( e -> {
-            System.out.println(e.getKey() + " = " + e.getValue().size() );
-        } );
     }
 
     private static ReportHeader createReportHeader(Map<String, TestCasesData> tests, Map<String, List<TestCasesData>> labels, Map<String, Vendor> results) {
@@ -199,13 +183,13 @@ public class Reporter {
         table.getHeaderDetails().add( d );
     }
 
-    private static List<ReportChart> createChartByLabels(Map<String, List<TestCasesData>> labels, Map<String, Vendor> results) {
-        List<ReportChart> charts = new ArrayList<>(  );
+    private static Map<String, ReportChart> createChartByLabels(Map<String, List<TestCasesData>> labels, Map<String, Vendor> results) {
+        Map<String, ReportChart> charts = new HashMap<>(  );
         for( Vendor v : results.values() ) {
             ReportChart chart = new ReportChart();
             chart.setName( "cbl"+charts.size() );
             chart.setTitle( v.getName() + " " + v.getVersion() );
-            charts.add( chart );
+            charts.put( v.getFileNameId(), chart );
         }
 
         for( Map.Entry<String, List<TestCasesData>> lbl : labels.entrySet() ) {
@@ -231,58 +215,60 @@ public class Reporter {
                     }
                 }
             }
-            for( int i = 0; i < charts.size(); i++ ) {
+            int i = 0;
+            for( Vendor vendor : results.values() ) {
                 ReportChart.DataPoint row = new ReportChart.DataPoint(  );
                 row.setLabel( lbl.getKey() );
-                row.getData().add( (int) Math.floor((double)success[i] / (double)total[1]) * 100);
-                row.getData().add( (int) Math.floor((double)ignored[i] / (double)total[1]) * 100);
-                row.getData().add( 100 - success[i] - ignored[i] );
-                charts.get( i ).getDataset().add( row );
-                charts.get( i ).getLabels().add( lbl.getKey() );
+                row.getData().add( success[i] );
+                row.getData().add( ignored[i] );
+                row.getData().add( failed[i] );
+                charts.get( vendor.getFileNameId() ).getDataset().add( row );
+                charts.get( vendor.getFileNameId() ).getLabels().add( lbl.getKey() );
+                i++;
             }
         }
         return charts;
     }
 
-    private static ReportTable createTableByLabels(Map<String, List<TestCasesData>> labels, Map<String, Vendor> results) {
-        ReportTable table = new ReportTable(  );
-        addHeader( table, "", "" );
+    private static Map<String, ReportTable> createTableByLabels(Map<String, List<TestCasesData>> labels, Map<String, Vendor> results) {
+        Map<String, ReportTable> rt = new HashMap<>(  );
+
         for( Vendor v : results.values() ) {
+            ReportTable table = new ReportTable(  );
+            addHeader( table, "", "" );
             addHeader( table, v.getName(), v.getVersion() );
+            rt.put( v.getFileNameId(), table );
         }
         for( Map.Entry<String, List<TestCasesData>> lbl : labels.entrySet() ) {
-            TableRow row = new TableRow(  );
-            addRowCell( row, lbl.getKey(), "" );
-            int[] success = new int[results.size()];
-            int[] total = new int[results.size()];;
-            for( TestCasesData tcd : lbl.getValue() ) {
-                for( TestCases.TestCase tc : tcd.model.getTestCase() ) {
-                    int index = 0;
-                    for( Vendor v : results.values() ) {
+            for( Vendor v : results.values() ) {
+                ReportTable table = rt.get( v.getFileNameId() );
+                TableRow row = new TableRow(  );
+                addRowCell( row, lbl.getKey(), "" );
+                int success = 0;
+                int total = 0;
+                for( TestCasesData tcd : lbl.getValue() ) {
+                    for( TestCases.TestCase tc : tcd.model.getTestCase() ) {
                         String key = createTestKey( tcd.folder, tcd.testCaseName, tc.getId() );
                         TestResult r = v.getResults().get( key );
                         if( r != null && r.getResult() == TestResult.Result.SUCCESS ) {
-                            success[index]++;
+                            success++;
                         }
-                        total[index]++;
-                        index++;
+                        total++;
                     }
                 }
-            }
-            for( int i = 0; i < results.size(); i++ ) {
                 String icon = null;
-                if( success[i] == total[i] ) {
+                if( success == total ) {
                     icon = GLYPHICON_SUCCESS;
-                } else if( success[i] == 0 ) {
+                } else if( success == 0 ) {
                     icon = GLYPHICON_FAILURE;
                 } else {
                     icon = GLYPHICON_WARNING;
                 }
-                addRowCell( row, success[i]+"/"+total[i], icon );
+                addRowCell( row, success+"/"+total, icon );
+                table.getRows().add( row );
             }
-            table.getRows().add( row );
         }
-        return table;
+        return rt;
     }
 
     private static Configuration createFreemarkerConfiguration() {
@@ -387,7 +373,17 @@ public class Reporter {
         for( File vendor : vendors ) {
             File[] versions = vendor.listFiles( (dir, name) -> !name.startsWith( "." ) && !name.endsWith( ".html" ) );
             for( File version : versions ) {
+                File[] propertiesFile = version.listFiles( (dir, name) -> name.equals( "tck_results.properties" ) );
+                Properties properties = new Properties();
+                if( propertiesFile.length == 1 ) {
+                    try {
+                        properties.load( new FileReader( propertiesFile[0] ) );
+                    } catch ( IOException e ) {
+                        e.printStackTrace();
+                    }
+                }
                 File[] resultsFile = version.listFiles( (dir, name) -> name.equals( "tck_results.csv" ) );
+
                 if( resultsFile.length == 1 ) {
                     Map< String, TestResult > testResults = new TreeMap<>(  );
                     try (Stream<String> lines = Files.lines( resultsFile[0].toPath() ) ) {
@@ -401,11 +397,15 @@ public class Reporter {
                         logger.error( "Error reading input file '"+params.input.getName()+"'", e );
                         continue;
                     }
-                    Vendor v = new Vendor( vendor.getName(),
-                                           version.getName(),
+                    Vendor v = new Vendor( properties.getProperty( "vendor.name" ).trim(),
+                                           properties.getProperty( "vendor.url" ).trim(),
+                                           properties.getProperty( "product.name" ).trim(),
+                                           properties.getProperty( "product.url" ).trim(),
+                                           properties.getProperty( "product.version" ).trim(),
+                                           properties.getProperty( "product.comment" ).trim(),
                                            testResults );
                     results.put( v.getName()+" / "+v.getVersion(), v );
-                    logger.info( testResults.size() + " test results loaded." );
+                    logger.info( testResults.size() + " test results loaded for vendor "+v );
                 }
             }
         }
@@ -469,7 +469,7 @@ public class Reporter {
             if( line.hasOption( "o" ) ) {
                 String outputFolder = line.getOptionValue( "o" );
                 try {
-                    params.output = new File( outputFolder+"/DMN_TCK_result.html" );
+                    params.output = new File( outputFolder );
                     if( params.output.exists() ) {
                         params.output.delete();
                     }
@@ -494,7 +494,7 @@ public class Reporter {
         System.exit( 0 );
     }
 
-    private static class Parameters {
+    public static class Parameters {
         public File input;
         public Path testsFolder;
         public File output;

@@ -20,12 +20,26 @@ import java.util.Map;
 
 public class Vendor {
     private String                  name;
+    private String                  vendorUrl;
+    private String                  product;
+    private String                  productUrl;
     private String                  version;
+    private String                  comment;
     private Map<String, TestResult> results;
 
-    public Vendor(String name, String version, Map<String, TestResult> results) {
+    public Vendor( String name,
+                   String vendorUrl,
+                   String product,
+                   String productUrl,
+                   String version,
+                   String comment,
+                   Map<String, TestResult> results) {
         this.name = name;
+        this.vendorUrl = vendorUrl;
+        this.product = product;
+        this.productUrl = productUrl;
         this.version = version;
+        this.comment = comment;
         this.results = results;
     }
 
@@ -35,6 +49,38 @@ public class Vendor {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getProduct() {
+        return product;
+    }
+
+    public void setProduct(String product) {
+        this.product = product;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public String getVendorUrl() {
+        return vendorUrl;
+    }
+
+    public void setVendorUrl(String vendorUrl) {
+        this.vendorUrl = vendorUrl;
+    }
+
+    public String getProductUrl() {
+        return productUrl;
+    }
+
+    public void setProductUrl(String productUrl) {
+        this.productUrl = productUrl;
     }
 
     public String getVersion() {
@@ -53,6 +99,10 @@ public class Vendor {
         this.results = results;
     }
 
+    public String getFileNameId() {
+        return product.replaceAll( "//s+","" ) + "_" + version.replaceAll( "//s+", "" );
+    }
+
     @Override
     public boolean equals(Object o) {
         if ( this == o ) return true;
@@ -69,5 +119,18 @@ public class Vendor {
         int result = name != null ? name.hashCode() : 0;
         result = 31 * result + (version != null ? version.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Vendor{" +
+               "name='" + name + '\'' +
+               ", vendorUrl='" + vendorUrl + '\'' +
+               ", product='" + product + '\'' +
+               ", productUrl='" + productUrl + '\'' +
+               ", version='" + version + '\'' +
+               ", comment='" + comment + '\'' +
+               ", results=" + results +
+               '}';
     }
 }
