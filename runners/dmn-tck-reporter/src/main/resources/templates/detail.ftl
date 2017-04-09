@@ -117,16 +117,12 @@
                             <th class="text-nowrap" scope="row" rowspan="${row.rowspan[2]}" style="vertical-align:middle">${row.text[2]}</th>
                         </#if>
                         <th class="text-nowrap" scope="row">${row.text[3]}</th>
-                        <#list row.icons[4..] as icon>
-                            <td align="center" style="vertical-align:middle"><span class="glyphicon ${icon}" aria-hidden="true"></span></td>
-                        </#list>
+                        <td align="center" style="vertical-align:middle"><span class="glyphicon ${row.icons[4]}" aria-hidden="true"></span></td>
                     </tr>
                     </#list>
-                    <tr class="success">
+                    <tr class="info">
                         <th colspan="3" style="vertical-align:middle">Total</th>
-                    <#list tAllTests.totals as total>
-                        <td align="center" style="vertical-align:middle">${total}</td>
-                    </#list>
+                        <td align="center" style="vertical-align:middle">${tAllTests.totals[0]}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -160,11 +156,13 @@
                                     <th class="text-nowrap" scope="row" rowspan="${row.rowspan[2]}" style="vertical-align:middle">${row.text[2]}</th>
                                 </#if>
                                 <th class="text-nowrap" scope="row" style="vertical-align:middle">${row.text[3]}</th>
-                                <#list row.icons[4..] as icon>
-                                    <td align="center" style="vertical-align:middle"><span class="glyphicon ${icon}" aria-hidden="true"></span></td>
-                                </#list>
+                                <td align="center" style="vertical-align:middle"><span class="glyphicon ${row.icons[4]}" aria-hidden="true"></span></td>
                             </tr>
                             </#list>
+                            <tr class="info">
+                                <th colspan="3" style="vertical-align:middle">Total</th>
+                                <td align="center" style="vertical-align:middle">${tlbl.totals[0]}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

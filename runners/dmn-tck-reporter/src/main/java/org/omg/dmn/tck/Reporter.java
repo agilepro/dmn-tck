@@ -58,8 +58,8 @@ public class Reporter {
         ReportHeader header = createReportHeader( tests, labels, results );
         Map<String, ReportTable> tableByLabels = createTableByLabels( labels, results );
         Map<String, ReportChart> chartByLabels = createChartByLabels( labels, results);
-        ReportTable tableAllTests = createTableAllTests( tests.values(), results );
-        List<ReportTable> tableIndividualLabels = createTableByIndividualLabels( labels, results );
+        Map<String, ReportTable> tableAllTests = createTableAllTests( tests.values(), results );
+        Map<String, List<ReportTable>> tableIndividualLabels = createTableByIndividualLabels( labels, results );
 
         logger.info( "Generating report" );
         Configuration cfg = createFreemarkerConfiguration();
@@ -67,7 +67,7 @@ public class Reporter {
         IndexGenerator.generatePage( params, cfg, results );
         for( Vendor vendor : results.values() ) {
             OverviewGenerator.generatePage( params, cfg, vendor, header, tableByLabels.get( vendor.getFileNameId() ), chartByLabels.get( vendor.getFileNameId() ) );
-            DetailGenerator.generatePage( params, cfg, vendor, header, tableAllTests, tableIndividualLabels );
+            DetailGenerator.generatePage( params, cfg, vendor, header, tableAllTests.get( vendor.getFileNameId() ), tableIndividualLabels.get( vendor.getFileNameId() ) );
         }
     }
 
@@ -83,66 +83,69 @@ public class Reporter {
         return header;
     }
 
-    private static List<ReportTable> createTableByIndividualLabels(Map<String, List<TestCasesData>> tests, Map<String, Vendor> results) {
-        List<ReportTable> tables = new ArrayList<>(  );
+    private static Map<String, List<ReportTable>> createTableByIndividualLabels(Map<String, List<TestCasesData>> tests, Map<String, Vendor> results) {
+        Map<String, List<ReportTable>> tables = new HashMap<>(  );
 
         for( Map.Entry<String, List<TestCasesData>> entry : tests.entrySet() ) {
             List<TestCasesData> testList = entry.getValue();
-            ReportTable rt = createTableAllTests( testList, results );
-            rt.setTitle( entry.getKey() );
-            tables.add( rt );
+            Map<String, ReportTable> rt = createTableAllTests( testList, results );
+            for( Map.Entry<String, ReportTable> reportEntry : rt.entrySet() ) {
+                List<ReportTable> tablesForVendor = tables.get( reportEntry.getKey() );
+                if( tablesForVendor == null ) {
+                    tablesForVendor = new ArrayList<>(  );
+                    tables.put( reportEntry.getKey(), tablesForVendor );
+                }
+                reportEntry.getValue().setTitle( entry.getKey() );
+                tablesForVendor.add( reportEntry.getValue() );
+            }
         }
         return tables;
     }
 
-    private static ReportTable createTableAllTests(Collection<TestCasesData> tests, Map<String, Vendor> results) {
-        ReportTable table = new ReportTable(  );
-        addHeader( table, "Compliance", "" );
-        addHeader( table, "Test Case", "" );
-        addHeader( table, "Test Suite", "" );
-        addHeader( table, "Test", "" );
-        for( Vendor v : results.values() ) {
-            addHeader( table, v.getName(), v.getVersion() );
-        }
-        String[] text = new String[3];
-        TableRow[] parents = new TableRow[3];
-        int[] succeeded = new int[results.size()];
-        int[] total = new int[results.size()];
-        for( TestCasesData tcd : tests ) {
-            for( TestCases.TestCase tc : tcd.model.getTestCase() ) {
-                TableRow row = new TableRow(  );
-                String[] split = tcd.folder.split( "/" );
-                addRowCell( row, split[0], "" );
-                addRowCell( row, split[1], "" );
-                addRowCell( row, tcd.testCaseName, "" );
-                addRowCell( row, tc.getId() != null ? tc.getId() : "[no ID]", "" );
-                int i = 0;
-                for( Vendor v : results.values() ) {
-                    TestResult r = v.getResults().get( createTestKey( tcd.folder, tcd.testCaseName, tc.getId() ) );
+    private static Map<String, ReportTable> createTableAllTests(Collection<TestCasesData> tests, Map<String, Vendor> results) {
+        Map<String, ReportTable> tables = new HashMap<>(  );
+        for( Vendor vendor : results.values() ) {
+            ReportTable table = new ReportTable(  );
+            addHeader( table, "Compliance", "" );
+            addHeader( table, "Test Case", "" );
+            addHeader( table, "Test Suite", "" );
+            addHeader( table, "Test", "" );
+            addHeader( table, vendor.getProduct(), vendor.getVersion() );
+            String[] text = new String[3];
+            TableRow[] parents = new TableRow[3];
+            int succeeded = 0;
+            int total = 0;
+            for( TestCasesData tcd : tests ) {
+                for( TestCases.TestCase tc : tcd.model.getTestCase() ) {
+                    TableRow row = new TableRow(  );
+                    String[] split = tcd.folder.split( "/" );
+                    addRowCell( row, split[0], "" );
+                    addRowCell( row, split[1], "" );
+                    addRowCell( row, tcd.testCaseName, "" );
+                    addRowCell( row, tc.getId() != null ? tc.getId() : "[no ID]", "" );
+                    TestResult r = vendor.getResults().get( createTestKey( tcd.folder, tcd.testCaseName, tc.getId() ) );
                     String icon = null;
                     if( r == null ) {
                         icon = GLYPHICON_WARNING;
                     } else if( r.getResult() == TestResult.Result.SUCCESS ) {
                         icon = GLYPHICON_SUCCESS;
-                        succeeded[i]++;
+                        succeeded++;
                     } else if( r.getResult() == TestResult.Result.ERROR ) {
                         icon = GLYPHICON_FAILURE;
                     } else {
                         icon = GLYPHICON_WARNING;
                     }
                     addRowCell( row, "", icon );
-                    total[i]++;
-                    i++;
-                }
-                table.getRows().add( row );
+                    total++;
+                    table.getRows().add( row );
 
-                updateRowspan( text, parents, tcd, row, split );
+                    updateRowspan( text, parents, tcd, row, split );
+                }
             }
+            table.getTotals().add( succeeded+"/"+total );
+            tables.put( vendor.getFileNameId(), table );
         }
-        for( int i = 0; i < total.length; i++ ) {
-            table.getTotals().add( succeeded[i]+"/"+total[i] );
-        }
-        return table;
+        return tables;
     }
 
     private static void updateRowspan(String[] text, TableRow[] parents, TestCasesData tcd, TableRow row, String[] split) {

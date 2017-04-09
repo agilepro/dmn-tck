@@ -219,9 +219,8 @@
                 </div>
             </div>
             <blockquote>
-                <p><small><em><strong>DISCLAIMER:</strong> The following is an automatically generated report of the results
-                    of the TCK tests execution on the listed products from their individual
-                    vendors. These results were provided by the respective vendors. The accuracy of
+                <p><small><em><strong>DISCLAIMER:</strong> This report is automatically generated from the results
+                    of the TCK tests execution provided by each vendor. The accuracy of
                     the results is under the responsibility of the respective vendors.</em></small></p>
             </blockquote>
         </div>
