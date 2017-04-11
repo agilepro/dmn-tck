@@ -17,40 +17,40 @@
 package org.omg.dmn.tck;
 
 public class ReportHeader {
-    private String totalTests;
-    private String totalLabels;
-    private String totalProducts;
+    private long totalTests;
+    private long totalLabels;
+    private long totalProducts;
 
     public ReportHeader() {
     }
 
-    public ReportHeader(String totalTests, String totalLabels, String totalProducts) {
+    public ReportHeader(long totalTests, long totalLabels, long totalProducts) {
         this.totalTests = totalTests;
         this.totalLabels = totalLabels;
         this.totalProducts = totalProducts;
     }
 
-    public String getTotalTests() {
+    public long getTotalTests() {
         return totalTests;
     }
 
-    public void setTotalTests(String totalTests) {
+    public void setTotalTests(long totalTests) {
         this.totalTests = totalTests;
     }
 
-    public String getTotalLabels() {
+    public long getTotalLabels() {
         return totalLabels;
     }
 
-    public void setTotalLabels(String totalLabels) {
+    public void setTotalLabels(long totalLabels) {
         this.totalLabels = totalLabels;
     }
 
-    public String getTotalProducts() {
+    public long getTotalProducts() {
         return totalProducts;
     }
 
-    public void setTotalProducts(String totalProducts) {
+    public void setTotalProducts(long totalProducts) {
         this.totalProducts = totalProducts;
     }
 }

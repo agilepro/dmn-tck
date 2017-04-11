@@ -1,4 +1,5 @@
-<#-- @ftlvariable name="vendors" type="java.util.Map<String,Vendor>" -->
+<#-- @ftlvariable name="header" type="org.omg.dmn.tck.ReportHeader" -->
+<#-- @ftlvariable name="vendors" type="java.util.Map<java.lang.String,org.omg.dmn.tck.Vendor>" -->
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
@@ -27,6 +28,67 @@
     <!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" -->
 </head>
 <body>
+
+<script>
+    window.chartColors = {
+        red: 'rgb(255, 99, 132)',
+        orange: 'rgb(255, 159, 64)',
+        yellow: 'rgb(255, 205, 86)',
+        green: 'rgb(75, 192, 192)',
+        blue: 'rgb(54, 162, 235)',
+        purple: 'rgb(153, 102, 255)',
+        grey: 'rgb(231,233,237)'
+    };
+
+    var color = Chart.helpers.color;
+
+<#list vendors?values as vendor>
+        var c_data${vendor_index} = {
+        labels: [
+            "Succeeded", "Failed", "Skipped"
+        ],
+        datasets: [
+            {
+                backgroundColor: [
+                    color(window.chartColors.green).alpha(0.5).rgbString(),
+                    color(window.chartColors.red).alpha(0.5).rgbString(),
+                    color(window.chartColors.yellow).alpha(0.5).rgbString()
+                ],
+                borderColor: [
+                    window.chartColors.grey,
+                    window.chartColors.grey,
+                    window.chartColors.grey
+                ],
+                borderWidth: 1,
+                data: [
+                    ${vendor.succeeded}, ${vendor.failed}, ${header.totalTests - vendor.succeeded - vendor.failed}
+                ]
+            }
+        ]
+    };
+</#list>
+
+    window.onload = function() {
+<#list vendors?values as vendor>
+        var ctx = document.getElementById("chart${vendor_index}").getContext("2d");
+        window.chart${vendor_index} = new Chart(ctx, {
+            type: 'doughnut',
+            data: c_data${vendor_index},
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'right',
+                },
+                title: {
+                    display: true,
+                    text: 'Submitted results'
+                }
+            }
+        });
+</#list>
+    };
+
+</script>
 
 <div class="wrapper">
     <div class="header">
@@ -105,7 +167,10 @@
                                 </div>
                                 <div class="list-view-pf-additional-info">
                                     <div class="list-view-pf-additional-info-item">
-                                        Last Submission: <b>${.now?date}</b>
+                                        Submitted:&nbsp;<b>${vendor.submitted}/${header.totalTests}</b>
+                                    </div>
+                                    <div class="list-view-pf-additional-info-item">
+                                        Last Submission:&nbsp;<b>${.now?date}</b>
                                     </div>
                                 </div>
                             </div>
@@ -117,20 +182,19 @@
                         </div>
                         <div class="row">
 
-                            <div class="col-md-3">
-                                <img src="images/60.png" alt="Submitted tests"/>
+                            <div class="col-md-2">
+                                <canvas id="chart${vendor_index}"></canvas>
                             </div>
 
-                            <div class="col-md-9">
+                            <div class="col-md-10">
                                 <dl class="dl-horizontal">
-                                    <dt>Last Submission: </dt>
-                                    <dd>${.now?date}</dd>
-                                    <dt>Tests: </dt>
-                                    <dd>52</dd>
-                                    <dt>Labels: </dt>
-                                    <dd>25</dd>
-                                    <dt>Info: </dt>
-                                    <dd>${vendor.comment}</dd>
+                                    <dt>Last Submission: </dt><dd>${.now?date}</dd>
+                                    <dt>Tests: </dt><dd>${header.totalTests}</dd>
+                                    <dt>Labels: </dt><dd>${header.totalLabels}</dd>
+                                    <dt>Succeeded: </dt><dd>${vendor.succeeded}</dd>
+                                    <dt>Failed: </dt><dd>${vendor.failed}</dd>
+                                    <dt>Skipped: </dt><dd>${header.totalTests - vendor.succeeded - vendor.failed}</dd>
+                                    <dt>Info: </dt><dd>${vendor.comment}</dd>
                                 </dl>
                             </div>
                         </div>

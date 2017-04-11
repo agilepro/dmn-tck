@@ -27,6 +27,177 @@
 </head>
 <body>
 
+<script>
+    window.chartColors = {
+        red: 'rgb(255, 99, 132)',
+        orange: 'rgb(255, 159, 64)',
+        yellow: 'rgb(255, 205, 86)',
+        green: 'rgb(75, 192, 192)',
+        blue: 'rgb(54, 162, 235)',
+        purple: 'rgb(153, 102, 255)',
+        grey: 'rgb(231,233,237)'
+    };
+
+    var color = Chart.helpers.color;
+
+        var c_data0 = {
+        labels: [
+            "Succeeded", "Failed", "Skipped"
+        ],
+        datasets: [
+            {
+                backgroundColor: [
+                    color(window.chartColors.green).alpha(0.5).rgbString(),
+                    color(window.chartColors.red).alpha(0.5).rgbString(),
+                    color(window.chartColors.yellow).alpha(0.5).rgbString()
+                ],
+                borderColor: [
+                    window.chartColors.grey,
+                    window.chartColors.grey,
+                    window.chartColors.grey
+                ],
+                borderWidth: 1,
+                data: [
+                    43, 0, 9
+                ]
+            }
+        ]
+    };
+        var c_data1 = {
+        labels: [
+            "Succeeded", "Failed", "Skipped"
+        ],
+        datasets: [
+            {
+                backgroundColor: [
+                    color(window.chartColors.green).alpha(0.5).rgbString(),
+                    color(window.chartColors.red).alpha(0.5).rgbString(),
+                    color(window.chartColors.yellow).alpha(0.5).rgbString()
+                ],
+                borderColor: [
+                    window.chartColors.grey,
+                    window.chartColors.grey,
+                    window.chartColors.grey
+                ],
+                borderWidth: 1,
+                data: [
+                    32, 15, 5
+                ]
+            }
+        ]
+    };
+        var c_data2 = {
+        labels: [
+            "Succeeded", "Failed", "Skipped"
+        ],
+        datasets: [
+            {
+                backgroundColor: [
+                    color(window.chartColors.green).alpha(0.5).rgbString(),
+                    color(window.chartColors.red).alpha(0.5).rgbString(),
+                    color(window.chartColors.yellow).alpha(0.5).rgbString()
+                ],
+                borderColor: [
+                    window.chartColors.grey,
+                    window.chartColors.grey,
+                    window.chartColors.grey
+                ],
+                borderWidth: 1,
+                data: [
+                    52, 0, 0
+                ]
+            }
+        ]
+    };
+        var c_data3 = {
+        labels: [
+            "Succeeded", "Failed", "Skipped"
+        ],
+        datasets: [
+            {
+                backgroundColor: [
+                    color(window.chartColors.green).alpha(0.5).rgbString(),
+                    color(window.chartColors.red).alpha(0.5).rgbString(),
+                    color(window.chartColors.yellow).alpha(0.5).rgbString()
+                ],
+                borderColor: [
+                    window.chartColors.grey,
+                    window.chartColors.grey,
+                    window.chartColors.grey
+                ],
+                borderWidth: 1,
+                data: [
+                    52, 0, 0
+                ]
+            }
+        ]
+    };
+
+    window.onload = function() {
+        var ctx = document.getElementById("chart0").getContext("2d");
+        window.chart0 = new Chart(ctx, {
+            type: 'doughnut',
+            data: c_data0,
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'right',
+                },
+                title: {
+                    display: true,
+                    text: 'Submitted results'
+                }
+            }
+        });
+        var ctx = document.getElementById("chart1").getContext("2d");
+        window.chart1 = new Chart(ctx, {
+            type: 'doughnut',
+            data: c_data1,
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'right',
+                },
+                title: {
+                    display: true,
+                    text: 'Submitted results'
+                }
+            }
+        });
+        var ctx = document.getElementById("chart2").getContext("2d");
+        window.chart2 = new Chart(ctx, {
+            type: 'doughnut',
+            data: c_data2,
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'right',
+                },
+                title: {
+                    display: true,
+                    text: 'Submitted results'
+                }
+            }
+        });
+        var ctx = document.getElementById("chart3").getContext("2d");
+        window.chart3 = new Chart(ctx, {
+            type: 'doughnut',
+            data: c_data3,
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'right',
+                },
+                title: {
+                    display: true,
+                    text: 'Submitted results'
+                }
+            }
+        });
+    };
+
+</script>
+
 <div class="wrapper">
     <div class="header">
         <nav class="navbar navbar-default navbar-pf" role="navigation">
@@ -103,7 +274,10 @@
                                 </div>
                                 <div class="list-view-pf-additional-info">
                                     <div class="list-view-pf-additional-info-item">
-                                        Last Submission: <b>9-Apr-2017</b>
+                                        Submitted:&nbsp;<b>43/52</b>
+                                    </div>
+                                    <div class="list-view-pf-additional-info-item">
+                                        Last Submission:&nbsp;<b>10-Apr-2017</b>
                                     </div>
                                 </div>
                             </div>
@@ -115,20 +289,19 @@
                         </div>
                         <div class="row">
 
-                            <div class="col-md-3">
-                                <img src="images/60.png" alt="Submitted tests"/>
+                            <div class="col-md-2">
+                                <canvas id="chart0"></canvas>
                             </div>
 
-                            <div class="col-md-9">
+                            <div class="col-md-10">
                                 <dl class="dl-horizontal">
-                                    <dt>Last Submission: </dt>
-                                    <dd>9-Apr-2017</dd>
-                                    <dt>Tests: </dt>
-                                    <dd>52</dd>
-                                    <dt>Labels: </dt>
-                                    <dd>25</dd>
-                                    <dt>Info: </dt>
-                                    <dd>Camunda is an open source platform for workflow and business process management. You can model and execute BPMN 2.0, CMMN 1.1 and DMN 1.1.</dd>
+                                    <dt>Last Submission: </dt><dd>10-Apr-2017</dd>
+                                    <dt>Tests: </dt><dd>52</dd>
+                                    <dt>Labels: </dt><dd>25</dd>
+                                    <dt>Succeeded: </dt><dd>43</dd>
+                                    <dt>Failed: </dt><dd>0</dd>
+                                    <dt>Skipped: </dt><dd>9</dd>
+                                    <dt>Info: </dt><dd>Camunda is an open source platform for workflow and business process management. You can model and execute BPMN 2.0, CMMN 1.1 and DMN 1.1.</dd>
                                 </dl>
                             </div>
                         </div>
@@ -168,7 +341,10 @@
                                 </div>
                                 <div class="list-view-pf-additional-info">
                                     <div class="list-view-pf-additional-info-item">
-                                        Last Submission: <b>9-Apr-2017</b>
+                                        Submitted:&nbsp;<b>52/52</b>
+                                    </div>
+                                    <div class="list-view-pf-additional-info-item">
+                                        Last Submission:&nbsp;<b>10-Apr-2017</b>
                                     </div>
                                 </div>
                             </div>
@@ -180,20 +356,19 @@
                         </div>
                         <div class="row">
 
-                            <div class="col-md-3">
-                                <img src="images/60.png" alt="Submitted tests"/>
+                            <div class="col-md-2">
+                                <canvas id="chart1"></canvas>
                             </div>
 
-                            <div class="col-md-9">
+                            <div class="col-md-10">
                                 <dl class="dl-horizontal">
-                                    <dt>Last Submission: </dt>
-                                    <dd>9-Apr-2017</dd>
-                                    <dt>Tests: </dt>
-                                    <dd>52</dd>
-                                    <dt>Labels: </dt>
-                                    <dd>25</dd>
-                                    <dt>Info: </dt>
-                                    <dd>This is a beta release with the engine with partial functionality implemented</dd>
+                                    <dt>Last Submission: </dt><dd>10-Apr-2017</dd>
+                                    <dt>Tests: </dt><dd>52</dd>
+                                    <dt>Labels: </dt><dd>25</dd>
+                                    <dt>Succeeded: </dt><dd>32</dd>
+                                    <dt>Failed: </dt><dd>15</dd>
+                                    <dt>Skipped: </dt><dd>5</dd>
+                                    <dt>Info: </dt><dd>This is a beta release with the engine with partial functionality implemented</dd>
                                 </dl>
                             </div>
                         </div>
@@ -233,7 +408,10 @@
                                 </div>
                                 <div class="list-view-pf-additional-info">
                                     <div class="list-view-pf-additional-info-item">
-                                        Last Submission: <b>9-Apr-2017</b>
+                                        Submitted:&nbsp;<b>52/52</b>
+                                    </div>
+                                    <div class="list-view-pf-additional-info-item">
+                                        Last Submission:&nbsp;<b>10-Apr-2017</b>
                                     </div>
                                 </div>
                             </div>
@@ -245,20 +423,19 @@
                         </div>
                         <div class="row">
 
-                            <div class="col-md-3">
-                                <img src="images/60.png" alt="Submitted tests"/>
+                            <div class="col-md-2">
+                                <canvas id="chart2"></canvas>
                             </div>
 
-                            <div class="col-md-9">
+                            <div class="col-md-10">
                                 <dl class="dl-horizontal">
-                                    <dt>Last Submission: </dt>
-                                    <dd>9-Apr-2017</dd>
-                                    <dt>Tests: </dt>
-                                    <dd>52</dd>
-                                    <dt>Labels: </dt>
-                                    <dd>25</dd>
-                                    <dt>Info: </dt>
-                                    <dd>Drools provides a runtime compliance level 3 engine</dd>
+                                    <dt>Last Submission: </dt><dd>10-Apr-2017</dd>
+                                    <dt>Tests: </dt><dd>52</dd>
+                                    <dt>Labels: </dt><dd>25</dd>
+                                    <dt>Succeeded: </dt><dd>52</dd>
+                                    <dt>Failed: </dt><dd>0</dd>
+                                    <dt>Skipped: </dt><dd>0</dd>
+                                    <dt>Info: </dt><dd>Drools provides a runtime compliance level 3 engine</dd>
                                 </dl>
                             </div>
                         </div>
@@ -298,7 +475,10 @@
                                 </div>
                                 <div class="list-view-pf-additional-info">
                                     <div class="list-view-pf-additional-info-item">
-                                        Last Submission: <b>9-Apr-2017</b>
+                                        Submitted:&nbsp;<b>52/52</b>
+                                    </div>
+                                    <div class="list-view-pf-additional-info-item">
+                                        Last Submission:&nbsp;<b>10-Apr-2017</b>
                                     </div>
                                 </div>
                             </div>
@@ -310,20 +490,19 @@
                         </div>
                         <div class="row">
 
-                            <div class="col-md-3">
-                                <img src="images/60.png" alt="Submitted tests"/>
+                            <div class="col-md-2">
+                                <canvas id="chart3"></canvas>
                             </div>
 
-                            <div class="col-md-9">
+                            <div class="col-md-10">
                                 <dl class="dl-horizontal">
-                                    <dt>Last Submission: </dt>
-                                    <dd>9-Apr-2017</dd>
-                                    <dt>Tests: </dt>
-                                    <dd>52</dd>
-                                    <dt>Labels: </dt>
-                                    <dd>25</dd>
-                                    <dt>Info: </dt>
-                                    <dd>A full compliance level 3 DMN authoring environment</dd>
+                                    <dt>Last Submission: </dt><dd>10-Apr-2017</dd>
+                                    <dt>Tests: </dt><dd>52</dd>
+                                    <dt>Labels: </dt><dd>25</dd>
+                                    <dt>Succeeded: </dt><dd>52</dd>
+                                    <dt>Failed: </dt><dd>0</dd>
+                                    <dt>Skipped: </dt><dd>0</dd>
+                                    <dt>Info: </dt><dd>A full compliance level 3 DMN authoring environment</dd>
                                 </dl>
                             </div>
                         </div>
@@ -336,7 +515,7 @@
 <!-- pre-footer -->
 <div class="pre-footer">
     <div class="last-updated">
-        <p>Last updated:</strong> 9-Apr-2017 12:24:53 PM</p>
+        <p>Last updated:</strong> 10-Apr-2017 11:46:11 PM</p>
     </div>
 </div>
 <div class="footer">

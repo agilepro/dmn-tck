@@ -103,6 +103,22 @@ public class Vendor {
         return product.replaceAll( "//s+","" ) + "_" + version.replaceAll( "//s+", "" );
     }
 
+    public long getSucceeded() {
+        return this.results.values().stream().filter( t -> t.getResult() == TestResult.Result.SUCCESS ).count();
+    }
+
+    public long getFailed() {
+        return this.results.values().stream().filter( t -> t.getResult() == TestResult.Result.ERROR ).count();
+    }
+
+    public long getIgnored() {
+        return this.results.values().stream().filter( t -> t.getResult() == TestResult.Result.IGNORED ).count();
+    }
+
+    public long getSubmitted() {
+        return this.results.size();
+    }
+
     @Override
     public boolean equals(Object o) {
         if ( this == o ) return true;

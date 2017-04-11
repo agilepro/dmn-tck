@@ -51,8 +51,8 @@ public class Reporter {
     }
 
     private static void runReport(Parameters params) {
-        Map<String, Vendor> results = loadTestResults( params );
         Map<String, TestCasesData> tests = loadTestCases( params );
+        Map<String, Vendor> results = loadTestResults( params );
         Map<String, List<TestCasesData>> labels = sortTestsByLabel( tests );
 
         ReportHeader header = createReportHeader( tests, labels, results );
@@ -64,7 +64,7 @@ public class Reporter {
         logger.info( "Generating report" );
         Configuration cfg = createFreemarkerConfiguration();
 
-        IndexGenerator.generatePage( params, cfg, results );
+        IndexGenerator.generatePage( params, cfg, header, results );
         for( Vendor vendor : results.values() ) {
             OverviewGenerator.generatePage( params, cfg, vendor, header, tableByLabels.get( vendor.getFileNameId() ), chartByLabels.get( vendor.getFileNameId() ) );
             DetailGenerator.generatePage( params, cfg, vendor, header, tableAllTests.get( vendor.getFileNameId() ), tableIndividualLabels.get( vendor.getFileNameId() ) );
@@ -77,9 +77,9 @@ public class Reporter {
         for( TestCasesData tcd : tests.values() ) {
             totalTests += tcd.model.getTestCase().size();
         }
-        header.setTotalLabels( String.format( "%d", labels.size() ) );
-        header.setTotalTests( String.format( "%d", totalTests ) );
-        header.setTotalProducts( String.format( "%d", results.size() ) );
+        header.setTotalLabels( labels.size() );
+        header.setTotalTests( totalTests );
+        header.setTotalProducts( results.size() );
         return header;
     }
 
@@ -394,7 +394,8 @@ public class Reporter {
                         lines.forEach( l -> {
                             String[] fields = l.split( "," );
                             TestResult testResult = new TestResult( fields[0], fields[1], fields[2], TestResult.Result.fromString( fields[3] ) );
-                            testResults.put( createTestKey( fields[0], fields[1], fields[2] ), testResult );
+                            String testKey = createTestKey( fields[0], fields[1], fields[2] );
+                            testResults.put( testKey, testResult );
                         });
                     } catch (IOException e) {
                         logger.error( "Error reading input file '"+params.input.getName()+"'", e );

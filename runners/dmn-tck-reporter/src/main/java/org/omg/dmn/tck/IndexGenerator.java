@@ -34,13 +34,14 @@ import java.util.Map;
 public class IndexGenerator {
     private static final Logger logger = LoggerFactory.getLogger( IndexGenerator.class);
 
-    public static void generatePage(Reporter.Parameters params, Configuration cfg, Map<String, Vendor> results) {
+    public static void generatePage(Reporter.Parameters params, Configuration cfg, ReportHeader header, Map<String, Vendor> results) {
         logger.info( "Generating index.html" );
         try {
             Template temp = cfg.getTemplate( "/templates/index.ftl" );
 
             Map<String, Object> data = new HashMap<>(  );
             data.put( "vendors", results );
+            data.put( "header", header );
 
             Writer out = new FileWriter( params.output.getAbsolutePath() + "/index.html" );
             temp.process( data, out );
