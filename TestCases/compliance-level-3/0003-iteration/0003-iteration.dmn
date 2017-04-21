@@ -14,8 +14,11 @@
 	<itemDefinition name="tLoanList" isCollection="true">
 		<typeRef>tns:tLoan</typeRef>
 	</itemDefinition>
+    <itemDefinition name="tMonthlyPaymentList" isCollection="true">
+        <typeRef>feel:number</typeRef>
+    </itemDefinition>
 	<decision id="d_MonthlyPayment" name="MonthlyPayment">
-		<variable name="MonthlyPayment" typeRef="feel:number"/>
+		<variable name="MonthlyPayment" typeRef="tns:tMonthlyPaymentList"/>
 		<informationRequirement>
 			<requiredInput href="#i_Loans"/>
 		</informationRequirement>
