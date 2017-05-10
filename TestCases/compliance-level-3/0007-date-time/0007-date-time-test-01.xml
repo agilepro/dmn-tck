@@ -90,17 +90,17 @@
 		</resultNode>
 		<resultNode name="dtDuration2" type="decision">
 			<expected>
-				<value>P367DT6H58M59S</value>
+				<value>-P366DT22H58M59S</value>
 			</expected>
 		</resultNode>
 		<resultNode name="hoursInDuration" type="decision">
 			<expected>
-				<value>8814.98305555556</value>
+				<value>-8806.98305555556</value>
 			</expected>
 		</resultNode>
 		<resultNode name="sumDurations" type="decision">
 			<expected>
-				<value>P380DT8H59M13S</value>
+				<value>-P353DT20H58M45S</value>
 			</expected>
 		</resultNode>
 		<resultNode name="ymDuration2" type="decision">
