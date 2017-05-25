@@ -169,7 +169,7 @@
                             },
                             title: {
                                 display: true,
-                                text: 'Overview for ${cbl.title}'
+                                text: 'Test results for ${cbl.title} (by number of tests)'
                             },
                             scales: {
                                 xAxes: [{
@@ -185,8 +185,15 @@
 
             </script>
 
+            <div id="results_nav">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#">Chart (by %)</a></li>
+                    <li><a href="#">Chart (by #)</a></li>
+                    <li><a href="#">Table</a></li>
+                </ul>
+            </div>
+
             <div id="container" style="width: 100%;">
-                <h3>Tests Overview</h3>
                 <canvas id="${cbl.name}"></canvas>
             </div>
 
