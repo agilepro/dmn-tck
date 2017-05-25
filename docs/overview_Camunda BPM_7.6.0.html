@@ -220,8 +220,115 @@
                         }
                     ]
                 };
+                var cblp0_data = {
+                    labels: [
+                        "Business Knowledge Model","Compliance Level 2","Compliance Level 3","Context","Decision Table: Multiple Output","Decision Table: Single Output","FEEL Arithmetic","FEEL Conditionals","FEEL Filter (10.3.2.5)","FEEL Function Literals","FEEL Functions: date and time","FEEL Functions: lists","FEEL Functions: strings","FEEL Iteration","FEEL List","FEEL Quantifiers","FEEL Relation","Function Invocation","Hit Policy: ANY","Hit Policy: COLLECT","Hit Policy: PRIORITY","Hit Policy: UNIQUE","Item Definition","Literal Expression","Relation"
+                    ],
+                    datasets: [
+                        {
+                            label: "Succeeded",
+                            backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
+                            borderColor: window.chartColors.green,
+                            borderWidth: 1,
+                            data: [
+                            0,
+                            63,
+                            4,
+                            0,
+                            100,
+                            35,
+                            25,
+                            0,
+                            34,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            100,
+                            0,
+                            0,
+                            67,
+                            22,
+                            19,
+                            0
+                            ]
+                        },
+                        {
+                            label: "Skipped",
+                            backgroundColor: color(window.chartColors.yellow).alpha(0.5).rgbString(),
+                            borderColor: window.chartColors.yellow,
+                            borderWidth: 1,
+                            data: [
+                            100,
+                            37,
+                            96,
+                            100,
+                            0,
+                            65,
+                            75,
+                            100,
+                            66,
+                            100,
+                            100,
+                            100,
+                            100,
+                            100,
+                            100,
+                            100,
+                            100,
+                            100,
+                            0,
+                            100,
+                            100,
+                            33,
+                            78,
+                            81,
+                            100
+                            ]
+                        },
+                        {
+                            label: "Failed",
+                            backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+                            borderColor: window.chartColors.red,
+                            borderWidth: 1,
+                            data: [
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0
+                            ]
+                        }
+                    ]
+                };
 
                 window.onload = function() {
+                    // chart by test numbers
                     var ctx = document.getElementById("cbl0").getContext("2d");
                     window.cbl0 = new Chart(ctx, {
                         type: 'horizontalBar',
@@ -252,8 +359,39 @@
                             }
                         }
                     });
-                };
 
+                    // chart by test percentage
+                    var ctxp = document.getElementById("cblp0").getContext("2d");
+                    window.cblp0 = new Chart(ctxp, {
+                        type: 'horizontalBar',
+                        data: cblp0_data,
+                        options: {
+                            // Elements options apply to all of the options unless overridden in a dataset
+                            // In this case, we are setting the border of each horizontal bar to be 2px wide
+                            elements: {
+                                rectangle: {
+                                    borderWidth: 2,
+                                }
+                            },
+                            responsive: true,
+                            legend: {
+                                position: 'right',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Test results for Camunda 7.6.0 (by percentage of tests)'
+                            },
+                            scales: {
+                                xAxes: [{
+                                    stacked: true,
+                                }],
+                                yAxes: [{
+                                    stacked: true
+                                }]
+                            }
+                        }
+                    });
+                };
             </script>
 
             <div id="results_nav">
@@ -266,24 +404,23 @@
 
             <div class="tab-content">
                 <div id="tab1" class="tab-pane fade active in">
+                    <div id="chart_by_percent" style="width: 100%;">
+                        <canvas id="cblp0"></canvas>
+                    </div>
+                </div>
+                <div id="tab2" class="tab-pane fade">
                     <div id="chart_by_numbers" style="width: 100%;">
                         <canvas id="cbl0"></canvas>
                     </div>
                 </div>
-                <div id="tab2" class="tab-pane fade">
-                    <h3>Menu 2</h3>
-                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
-                </div>
                 <div id="tab3" class="tab-pane fade">
-                    <div class="container">
-                        <h3>Test results by label</h3>
-                        <p>Results from all the tests sorted by label</p>
-
+                    <p/>
+                    <div class="container" style="width: 95%;">
                         <div class="table-responsive">
                             <table class="table table-condensed table-bordered table-striped table-hover">
                                 <thead>
                                 <tr class="info">
-                                    <th>  <br/>
+                                    <th> Label <br/>
                                         <small></small>
                                     </th>
                                     <th> Camunda <br/>
@@ -460,7 +597,7 @@
 <!-- pre-footer -->
 <div class="pre-footer">
     <div class="last-updated">
-        <p>Last updated:</strong> 25-May-2017 10:57:16 AM</p>
+        <p>Last updated:</strong> 25-May-2017 1:20:11 PM</p>
     </div>
 </div>
 <div class="footer">
