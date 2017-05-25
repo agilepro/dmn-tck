@@ -20,6 +20,15 @@
     <!-- jquery max height -->
     <script src="js/jquery.matchHeight-min.js"></script>
 
+    <!-- tabs -->
+    <script>
+        $(document).ready(function(){
+            $(".nav-tabs a").click(function(){
+                $(this).tab('show');
+            });
+        });
+    </script>
+
     <!-- site libs -->
     <script src="js/lib.js"></script>
     <link href="css/lib.css" rel="stylesheet" media="screen, print">
@@ -187,44 +196,54 @@
 
             <div id="results_nav">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#">Chart (by %)</a></li>
-                    <li><a href="#">Chart (by #)</a></li>
-                    <li><a href="#">Table</a></li>
+                    <li class="active"><a href="#tab1">Chart (by %)</a></li>
+                    <li><a href="#tab2">Chart (by #)</a></li>
+                    <li><a href="#tab3">Table</a></li>
                 </ul>
             </div>
 
-            <div id="container" style="width: 100%;">
-                <canvas id="${cbl.name}"></canvas>
-            </div>
+            <div class="tab-content">
+                <div id="tab1" class="tab-pane fade active in">
+                    <div id="chart_by_numbers" style="width: 100%;">
+                        <canvas id="cbl0"></canvas>
+                    </div>
+                </div>
+                <div id="tab2" class="tab-pane fade">
+                    <h3>Menu 2</h3>
+                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+                </div>
+                <div id="tab3" class="tab-pane fade">
+                    <div class="container">
+                        <h3>Test results by label</h3>
+                        <p>Results from all the tests sorted by label</p>
 
-            <div class="container">
-                <h3>Test results by label</h3>
-                <p>Results from all the tests sorted by label</p>
-
-                <div class="table-responsive">
-                    <table class="table table-condensed table-bordered table-striped table-hover">
-                        <thead>
-                        <tr class="info">
-        <#list tByLabels.headers as head>
-                            <th> ${head} <br/>
-                                <small>${tByLabels.headerDetails[head_index]}</small>
-                            </th>
-        </#list>
-                        </tr>
-                        </thead>
-                        <tbody>
-        <#list tByLabels.rows as row>
-                        <tr>
-                            <th class="text-nowrap text-small" scope="row"><a onclick="labelDetail('detail_${vendor.fileNameId}.html', 'tb${row_index}','${row.text[0]}')">${row.text[0]}</a></th>
-                            <td align="center">
-                                <span class="glyphicon ${row.icons[1]}" aria-hidden="true"><br/><small>${row.text[1]}</small></span>
-                            </td>
-                        </tr>
-        </#list>
-                        </tbody>
-                    </table>
+                        <div class="table-responsive">
+                            <table class="table table-condensed table-bordered table-striped table-hover">
+                                <thead>
+                                <tr class="info">
+                                <#list tByLabels.headers as head>
+                                    <th> ${head} <br/>
+                                        <small>${tByLabels.headerDetails[head_index]}</small>
+                                    </th>
+                                </#list>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <#list tByLabels.rows as row>
+                                <tr>
+                                    <th class="text-nowrap text-small" scope="row"><a onclick="labelDetail('detail_${vendor.fileNameId}.html', 'tb${row_index}','${row.text[0]}')">${row.text[0]}</a></th>
+                                    <td align="center">
+                                        <span class="glyphicon ${row.icons[1]}" aria-hidden="true"><br/><small>${row.text[1]}</small></span>
+                                    </td>
+                                </tr>
+                                </#list>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
+
             <blockquote>
                 <p><small><em><strong>DISCLAIMER:</strong> This report is automatically generated from the results
                     of the TCK tests execution provided by each vendor. The accuracy of
