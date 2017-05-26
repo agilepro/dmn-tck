@@ -113,9 +113,23 @@
                             </#if>
                             <#if row.rowspan[2] gt 0 >
                                 <td class="text-nowrap" scope="row" rowspan="${row.rowspan[2]}" style="vertical-align:middle">${row.text[2]}</td>
+                                <td align="center" rowspan="${row.rowspan[2]}" style="vertical-align:middle">
+                                    <#if row.text[3] == "OK">
+                                    <a target="_blank" href="https://github.com/agilepro/dmn-tck/blob/master/TestCases/${row.text[0]}/${row.text[1]}/${row.text[1]}.pdf">
+                                        <span class="${row.icons[3]}" aria-hidden="true"></span>
+                                    </a>
+                                    <#else>
+                                        <span class="${row.icons[3]} text-muted" aria-hidden="true"></span>
+                                    </#if>
+                                </td>
+                                <td align="center" rowspan="${row.rowspan[2]}" style="vertical-align:middle">
+                                    <a target="_blank" href="https://github.com/agilepro/dmn-tck/tree/master/TestCases/${row.text[0]}/${row.text[1]}">
+                                        <span class="${row.icons[4]}" aria-hidden="true"></span>
+                                    </a>
+                                </td>
                             </#if>
-                            <td class="text-nowrap" scope="row">${row.text[3]}</td>
-                            <td class="text-nowrap" scope="row">${row.text[4]}</td>
+                            <td class="text-nowrap" scope="row">${row.text[5]}</td>
+                            <td class="text-nowrap" scope="row">${row.text[6]}</td>
                         </tr>
                         </#list>
                         </tbody>

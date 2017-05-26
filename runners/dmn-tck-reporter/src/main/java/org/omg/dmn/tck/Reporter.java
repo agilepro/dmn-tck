@@ -58,7 +58,7 @@ public class Reporter {
         Map<String, ReportTable> tableByLabels = createTableByLabels( labels, results );
         Map<String, ReportChart> chartByLabels = createChartByLabels( labels, results);
         Map<String, ReportChart> chartByLabelsPercent = createChartByLabelsPercent( labels, results);
-        ReportTable tableAllTests = createTableAllTests( tests.values() );
+        ReportTable tableAllTests = createTableAllTests( params, tests.values() );
         Map<String, ReportTable> tableAllTestsByVendor = createTableAllTestsByVendor( tests.values(), results );
         Map<String, List<ReportTable>> tableIndividualLabels = createTableByIndividualLabels( labels, results );
 
@@ -105,11 +105,13 @@ public class Reporter {
         return tables;
     }
 
-    private static ReportTable createTableAllTests(Collection<TestCasesData> tests) {
+    private static ReportTable createTableAllTests(Parameters params, Collection<TestCasesData> tests) {
         ReportTable table = new ReportTable(  );
         addHeader( table, "Compliance", "" );
         addHeader( table, "Test Case", "" );
         addHeader( table, "Test Suite", "" );
+        addHeader( table, "Doc", "" );
+        addHeader( table, "Source", "" );
         addHeader( table, "Test", "" );
         addHeader( table, "Description", "" );
         String[] text = new String[3];
@@ -121,6 +123,12 @@ public class Reporter {
                 addRowCell( row, split[0], "" );
                 addRowCell( row, split[1], "" );
                 addRowCell( row, tcd.testCaseName, "" );
+                if( Files.exists( params.testsFolder.resolve( tcd.folder+"/"+split[1]+".pdf" ) ) ) {
+                    addRowCell( row, "OK", "glyphicon glyphicon-book" );
+                } else {
+                    addRowCell( row, "NA", "glyphicon glyphicon-book" );
+                }
+                addRowCell( row, "", "glyphicon glyphicon-folder-open" );
                 addRowCell( row, tc.getId() != null ? tc.getId() : "[no ID]", "" );
                 addRowCell( row, tc.getDescription() != null ? tc.getDescription() : "", "" );
                 table.getRows().add( row );
